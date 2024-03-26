@@ -8,7 +8,7 @@ namespace SharedLibrary.Dtos
 {
     public class ErrorDto
     {
-        public List<string>? Errors { get; private set; } // Başka bir metodda kullanabilmek için private yaptık
+        public List<string>? Errors { get; private set; } // Bu sınıf içinde Başka bir metodda kullanabilmek için private yaptık
         public bool IsShow { get; private set; }
 
         public ErrorDto()
@@ -28,5 +28,7 @@ namespace SharedLibrary.Dtos
             Errors = Errors;
             IsShow = isShow;
         }
+
+        
     }
 }
