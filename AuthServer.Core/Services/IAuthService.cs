@@ -14,7 +14,7 @@ namespace AuthServer.Core.Services
 
         Task<Response<NoDataDto>> RevokeRefreshToken(string refreshToken); // LogOut olduğunda RefreshToken'ı silmek için bu metodu tanımladık
 
-        Task<Response<ClientTokenDto>> CreateTokenClient (ClientLoginDto clientLoginDto); // Üyelik sistemi olamadan Client bir API'ye istek atabilir bunun için CreateTokenClient metodu tanımladık. ClientTokenDto ile taşınan ClientId, ClientSecret (ClientId ve ClientSecret appSettings.json'da tutacağız.) appSettings.json'daki veriler doğru ise  CreateTokenClient metodu ile token üretilecek. Burada RefreshToken olmayacak
+        Task<Response<ClientTokenDto>> CreateTokenClient (ClientLoginDto clientLoginDto); // Üyelik sistemi olamadan Client bir API'ye istek atabilir bunun için CreateTokenClient metodu                                                                                           tanımladık. ClientTokenDto ile taşınan ClientId, ClientSecret (ClientId ve ClientSecret                                                                                                 appSettings.json'da tutacağız.) appSettings.json'daki veriler doğru ise  CreateTokenClient metodu                                                                                           ile token üretilecek. Burada RefreshToken olmayacak
     }
 }
 

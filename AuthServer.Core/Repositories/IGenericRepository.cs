@@ -10,7 +10,7 @@ namespace AuthServer.Core.Repositories
     public interface IGenericRepository<T>where T : class
     {
         Task<T> GetByIdAsync(int id);
-        Task<IEnumerable<T>> GetAllAsync();  // IQuaryable sorgulu bir şekilde tüm dataları getirmek için oluşturduk
+        Task<IEnumerable<T>> GetAllAsync();  
 
         IQueryable<T> Where(Expression<Func<T,bool>>predicate); // ToList() yapmadan liste gelmez.
         Task AddAsync(T entity);

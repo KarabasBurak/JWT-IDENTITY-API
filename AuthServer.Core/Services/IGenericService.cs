@@ -15,11 +15,11 @@ namespace AuthServer.Core.Services
         Task<Response<TDto>> GetByIdAsync(int id);
         Task<Response<IEnumerable<TDto>>>  GetAllAsync();  // IQuaryable sorgulu bir şekilde tüm dataları getirmek için oluşturduk
 
-        IEnumerable<Response<TDto>> Where(Expression<Func<T, bool>> predicate); // ToList() yapmadan liste gelmez.
-        Task<Response<TDto>> AddAsync(T entity);
+        Task<Response<IEnumerable<TDto>>> Where(Expression<Func<T, bool>> predicate); // ToList() yapmadan liste gelmez.
+        Task<Response<TDto>> AddAsync(TDto tDto);
 
         // Silme işleminde Response sınıfındaki Data, StatusCode ve Errors propertylerinden Data propertysinde bir veri dönmek istemedik. Statuscode ve ve varsa Errorsları dönmek istedik. 
-        Task<Response<NoDataDto>> Remove(T entity);  
-        Task<Response<TDto>> Update(T entity);
+        Task<Response<NoDataDto>> Remove(int id);  
+        Task<Response<NoDataDto>> Update(TDto tDto);
     }
 }
