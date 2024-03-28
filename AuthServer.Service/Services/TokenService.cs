@@ -120,13 +120,13 @@ namespace AuthServer.Service.Services
 
                 var handler = new JwtSecurityTokenHandler(); // Token'ı JwtSecurityTokenHandler oluşturacak.
                 var token = handler.WriteToken(jwtSecurityToken); // WriteToken; issuer, expires,notBefore,claims,signingCredentials bilgilere göre string bir token ürettiyor.
-                var tokenDto = new ClientTokenDto
+                var clientTokenDto = new ClientTokenDto   //
                 {
                     AccessToken = token,
                     AccessTokenExpiration = accessTokenExpiration,
                     
                 };
-                return tokenDto;
+                return clientTokenDto;
             }
         }
     }

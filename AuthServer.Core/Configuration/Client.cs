@@ -10,11 +10,11 @@ namespace AuthServer.Core.Configuration
     {
         public string Id { get; set; } // ClientId; ClientSecret'a karşılık gelecek
         public string Secret { get; set; }
-        public List<String> Audiences { get; set; } // Audiences; hangi API'lere erişimi olacağı bilgisini liste şeklinde Audiences property'sinde tutacağız
+        public List<String> Audiences { get; set; } // Audiences; Client'ın hangi API'lere erişimi olacağı bilgisini liste şeklinde Audiences property'sinde tutacağız
 
     }
 }
 
 
 // Client, AuthServer'a istekte bulunacak. Model veya entity değil.
-// İstekte bulunurken Id, Secreti, Audiences propları istek atacak
+// İstekte bulunurken Id, Secret, Audiences propları istek atacak
