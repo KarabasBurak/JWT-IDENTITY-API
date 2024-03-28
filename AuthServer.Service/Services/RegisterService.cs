@@ -19,7 +19,7 @@ namespace AuthServer.Service.Services
             _mapper = mapper;
         }
 
-        public async Task<Response<AppUserDto>> GetUsernameAsync(string username) 
+        public async Task<Response<AppUserDto>> GetUserByNameAsync(string username) 
         {
             var user= await _userManager.FindByNameAsync(username); // client'dan aldğım username nesnesine atanmış veriyi AppUser tablosunda arama işlemi yapıldı. sonuç user değişkenine                                                                 atandı
             if (user == null)

@@ -12,6 +12,6 @@ namespace AuthServer.Core.Services
     {
         Task<Response<AppUserDto>> RegisterationAsync(RegisterDto registerDto);
 
-        Task<Response<AppUserDto>> GetUsernameAsync(string username); // DB'den username nesnesi kullanıcı çekip dönmek için bu metod tanımlandı
+        Task<Response<AppUserDto>> GetUserByNameAsync(string username); // DB'den username nesnesi kullanıcı çekip dönmek için bu metod tanımlandı
     }
 }

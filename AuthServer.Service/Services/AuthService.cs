@@ -9,11 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using SharedLibrary;
 using SharedLibrary.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AuthServer.Service.Services
 {
@@ -43,14 +38,14 @@ namespace AuthServer.Service.Services
                 return Response<TokenDto>.Fail("RefreshToken not found", 404, true);
             }
 
-            var user=await _userManager.FindByIdAsync(refreshTokenDto.UserId); // AppUser içinde Id'ye göre arama yap ve refreshTokenDto içindeki UserId'nin aynısını bul ve o Id'ye sahip kullanıcı user nesnesine ata.
+            var user=await _userManager.FindByIdAsync(refreshTokenDto.UserId); // AppUser içinde Id'ye göre arama yap ve refreshTokenDto içindeki UserId'nin aynısını bul ve o Id'ye sahip                                                                          kullanıcı user nesnesine ata.
 
             if(user == null)
             {
                 return Response<TokenDto>.Fail("User Not Found",404,true);
             }
 
-            var tokenDto=_tokenService.CreateToken(user); // Yukarıdan çektiğin user nesnesi için token oluştur
+            var tokenDto=_tokenService.CreateToken(user); // Yukarıdan çektiğin user nesnesindeki kullanıcı için token oluştur
 
             refreshTokenDto.RefreshToken=tokenDto.RefreshToken; 
             refreshTokenDto.Expiration = tokenDto.RefreshTokenExpiration;
@@ -60,7 +55,7 @@ namespace AuthServer.Service.Services
 
         }
 
-        // Login olurken üretilecek token işlemlerini yapıyoruz
+        // Login olurken ilgili bilgileri kontrol edip bilgiler doğru ise üretilecek token işlemlerini yapıyoruz
         public async Task<Response<TokenDto>> CreateTokenAsync(LoginDto loginDto)
         {
             if(loginDto == null) // Client tarafından login bilgilerini(email ve password) alıyoruz ve boş/dolu olduğunu kontrol ediyoruz.
