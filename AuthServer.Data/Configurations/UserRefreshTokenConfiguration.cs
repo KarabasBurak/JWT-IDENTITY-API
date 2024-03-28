@@ -13,7 +13,7 @@ namespace AuthServer.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<UserRefreshToken> builder)
         {
-            builder.HasKey(x => x.Id);
+            builder.HasKey(x => x.UserId);
             builder.Property(x => x.RefreshToken).IsRequired();
         }
     }

@@ -8,7 +8,7 @@ namespace AuthServer.Core.Services
     {
         // CreateTokenAsync metoduna veriler LoginDto sınıfındaki proplar ile taşınacak. Taşınan verilerin doğruluğu kontrol edilecek
         // Üretilen token Asenkron olacak şekilde TokenDto'daki proplar ile veriler alınıp Response sınıfındaki Data prop'si ile dönüş olacak. 
-        Task<Response<TokenDto>> CreateTokenAsync (LoginDto loginDto);
+        Task<Response<TokenDto>> CreateTokenAsync (LoginDto loginDto); 
 
         Task<Response<TokenDto>> CreateRefreshToken(string refreshToken);
 

@@ -10,9 +10,9 @@ namespace SharedLibrary
 {
     public class Response<T> where T : class
     {
-        public T? Data { get; private set; }
+        public T Data { get; private set; }
         public int StatusCode { get; private set; }
-        public ErrorDto? Error { get; private set; }
+        public ErrorDto Error { get; private set; }
 
         [JsonIgnore]
         public bool IsSuccesful { get; private set; } // Client'lara göstermek istemediğimiz bir property. Kendi iç yapımızda kullanacağız. API, Mini API gibi

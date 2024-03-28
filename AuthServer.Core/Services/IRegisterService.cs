@@ -10,7 +10,7 @@ namespace AuthServer.Core.Services
 {
     public interface IRegisterService
     {
-        Task<Response<AppUserDto>> RegistirationAsync(RegisterDto registerDto);
+        Task<Response<AppUserDto>> RegisterationAsync(RegisterDto registerDto);
 
         Task<Response<AppUserDto>> GetUsernameAsync(string username); // DB'den username nesnesi kullanıcı çekip dönmek için bu metod tanımlandı
     }

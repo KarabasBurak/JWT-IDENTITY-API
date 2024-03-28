@@ -24,20 +24,40 @@ namespace AuthServer.Service.Services
         private readonly ITokenService _tokenService;
         private readonly UserManager<AppUser> _userManager;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IGenericRepository<UserRefreshToken> _userRefreshTokenService;
+        private readonly IGenericRepository<UserRefreshToken> _userRefreshToken;
 
-        public AuthService(IOptions<List<Client>> optionClients, ITokenService tokenService, UserManager<AppUser> userManager, IUnitOfWork unitOfWork, IGenericRepository<UserRefreshToken> userRefreshTokenService)
+        public AuthService(IOptions<List<Client>> optionClients, ITokenService tokenService, UserManager<AppUser> userManager, IUnitOfWork unitOfWork, IGenericRepository<UserRefreshToken> userRefreshToken)
         {
             _clients = optionClients.Value;
             _tokenService = tokenService;
             _userManager = userManager;
             _unitOfWork = unitOfWork;
-            _userRefreshTokenService = userRefreshTokenService;
+            _userRefreshToken = userRefreshToken;
         }
 
-        public Task<Response<TokenDto>> CreateRefreshToken(string refreshToken)
+        public async Task<Response<TokenDto>> CreateRefreshToken(string refreshToken)
         {
-            throw new NotImplementedException();
+            var refreshTokenDto = await _userRefreshToken.Where(x=>x.RefreshToken == refreshToken).SingleOrDefaultAsync(); // DB'de RefreshToken var mı ?
+            if (refreshTokenDto == null)
+            {
+                return Response<TokenDto>.Fail("RefreshToken not found", 404, true);
+            }
+
+            var user=await _userManager.FindByIdAsync(refreshTokenDto.UserId); // AppUser içinde Id'ye göre arama yap ve refreshTokenDto içindeki UserId'nin aynısını bul ve o Id'ye sahip kullanıcı user nesnesine ata.
+
+            if(user == null)
+            {
+                return Response<TokenDto>.Fail("User Not Found",404,true);
+            }
+
+            var tokenDto=_tokenService.CreateToken(user); // Yukarıdan çektiğin user nesnesi için token oluştur
+
+            refreshTokenDto.RefreshToken=tokenDto.RefreshToken; 
+            refreshTokenDto.Expiration = tokenDto.RefreshTokenExpiration;
+
+            await _unitOfWork.CommitAsync();
+            return Response<TokenDto>.Success(tokenDto, 200);
+
         }
 
         // Login olurken üretilecek token işlemlerini yapıyoruz
@@ -63,13 +83,13 @@ namespace AuthServer.Service.Services
 
             var token = _tokenService.CreateToken(user); // ITokenService'deki CreateToken metodunu çağırdık ve token oluştururken AppUser için oluşturacağımız için user değişkenini verdik
 
-            var userRefreshToken = await _userRefreshTokenService.Where(x => x.UserId == user.Id).SingleOrDefaultAsync(); // Önce refresh token var mı yok mu kontrol ettik. yok ise token                                                                                                                          ürettik
+            var userRefreshToken = await _userRefreshToken.Where(x => x.UserId == user.Id).SingleOrDefaultAsync(); // UserId'ye göre refresh token çek
 
-            if (userRefreshToken == null)
+            if (userRefreshToken == null) // refresh token yok ise refresh token üret
             {
-                await _userRefreshTokenService.AddAsync(new UserRefreshToken {UserId=user.Id, RefreshToken=token.RefreshToken, Expiration=token.RefreshTokenExpiration});
+                await _userRefreshToken.AddAsync(new UserRefreshToken {UserId=user.Id, RefreshToken=token.RefreshToken, Expiration=token.RefreshTokenExpiration});
             }
-            else
+            else // var ise mevcut refresh token'ı tanımla
             {
                 userRefreshToken.RefreshToken = token.RefreshToken;
                 userRefreshToken.Expiration = token.RefreshTokenExpiration;
@@ -95,9 +115,21 @@ namespace AuthServer.Service.Services
 
         }
 
-        public Task<Response<NoDataDto>> RevokeRefreshToken(string refreshToken)
+        // Kullanıcı LogOut olursa RefreshToken'ı silme işlemini RevokeRefreshToken metodu ile gerçekleştireceğiz. 
+        public async Task<Response<NoDataDto>> RevokeRefreshToken(string refreshToken)
         {
-            throw new NotImplementedException();
+            var existResfreshToken = await _userRefreshToken.Where(x => x.RefreshToken == refreshToken).SingleOrDefaultAsync();
+
+            if(existResfreshToken == null)
+            {
+                return Response<NoDataDto>.Fail("Refresh Token Not Found",404,true);
+            }
+
+            _userRefreshToken.Remove(existResfreshToken);
+            await _unitOfWork.CommitAsync();
+            return Response<NoDataDto>.Success(200);
+
+
         }
     }
 }

@@ -15,3 +15,7 @@ namespace AuthServer.Service.Services
         }
     }
 }
+
+/*
+ SecurityKey üretme işlemini SignService sınfında gerçekleştirdik. Bu SecurityKey JWT doğrulama işlemlerinde kullanılacak
+ */
