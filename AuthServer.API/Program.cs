@@ -7,6 +7,8 @@ using AuthServer.Data;
 using AuthServer.Data.Repositories;
 using AuthServer.Service.Mapping;
 using AuthServer.Service.Services;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -85,7 +87,12 @@ builder.Services
             ValidateLifetime=true,
             ClockSkew=TimeSpan.Zero
         };
-    }); 
+    });
+
+// FluentValidation Metodları eklendi
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
+builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

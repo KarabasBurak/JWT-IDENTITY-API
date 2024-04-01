@@ -21,3 +21,9 @@ namespace AuthServer.Data.Configurations
         }
     }
 }
+
+/*
+ 
+Configurations'larda kullanıcıya bir measj dönülmez. Burada tanımlanan özellikler veritabanı için oluşturulur. Configurations ile belirlediğin özellikleri FluentValidation ile kullanıcıya mesajı verilir. 
+
+ */
