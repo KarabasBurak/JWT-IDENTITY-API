@@ -9,7 +9,7 @@ namespace AuthServer.API.Validations
         {
             RuleFor(x => x.Email).NotEmpty().WithMessage("Email is Required").EmailAddress().WithMessage("Email is wrong");
 
-            RuleFor(x => x.UserName).NotEmpty().WithMessage("Password is required");
+            RuleFor(x => x.UserName).NotEmpty().WithMessage("UserName is required");
 
             RuleFor(x => x.Password).NotEmpty().WithMessage("Password is required");
 

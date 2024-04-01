@@ -53,7 +53,7 @@ namespace AuthServer.Service.Services
 
             if(!result.Succeeded)
             {
-                var errors = result.Errors.Select(x => x.Description).ToList();
+                var errors = result.Errors.Select(x => x.Description).ToList(); // Identity içinde otomatik hata mesajları var
                 return Response<AppUserDto>.Fail(new ErrorDto(errors, true), 400);
             }
 
