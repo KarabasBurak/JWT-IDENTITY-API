@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SharedLibrary;
 
 namespace AuthServer.API.Controllers
@@ -8,7 +7,7 @@ namespace AuthServer.API.Controllers
     [ApiController]
     public class CustomBaseController : ControllerBase
     {
-        [NonAction]
+        
         public IActionResult CreateActionResult<T>(Response<T>response)where T : class
         {
             return new ObjectResult(response)

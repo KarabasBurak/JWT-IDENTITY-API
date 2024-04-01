@@ -46,7 +46,6 @@ namespace AuthServer.Service.Services
                 new Claim(ClaimTypes.NameIdentifier,appUser.Id), //AppUser tablosundan Id'yi aldık ClaimTypes.NameIdentifier'a atadık. Atadığımız Claimler ile bu verileri taşıyacağız
                 new Claim(ClaimTypes.Email,appUser.Email),
                 new Claim(ClaimTypes.Name,appUser.UserName),
-                new Claim("City",appUser.City),
                 new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
             };
 
@@ -78,6 +77,7 @@ namespace AuthServer.Service.Services
             var accessTokenExpiration = DateTime.Now.AddMinutes(_customTokenDto.AccessTokenExpiration); // 5 dk gelirse var olan saatte 5 dk ekleyecek
             var refreshTokenExpiration = DateTime.Now.AddMinutes(_customTokenDto.RefreshTokenExpiration);
             var securityKey=SignService.GetSymmetricSecurityKey(_customTokenDto.SecurityKey); // Token'ı imzalayacak Key 
+
             SigningCredentials signingCredentials=new SigningCredentials(securityKey,SecurityAlgorithms.HmacSha256Signature); // Token İmza kısmı
 
             JwtSecurityToken jwtSecurityToken = new JwtSecurityToken
@@ -90,7 +90,7 @@ namespace AuthServer.Service.Services
                 );
 
             var handler=new JwtSecurityTokenHandler(); // Token'ı JwtSecurityTokenHandler oluşturacak.
-            var token=handler.WriteToken(jwtSecurityToken); // WriteToken; issuer, expires,notBefore,claims,signingCredentials bilgilere göre string bir token ürettiyor.
+            var token=handler.WriteToken(jwtSecurityToken); // WriteToken; issuer, expires,notBefore,claims,signingCredentials bilgilere göre string bir token üretiyor.                                                     
             var tokenDto = new TokenDto
             {
                 AccessToken = token,

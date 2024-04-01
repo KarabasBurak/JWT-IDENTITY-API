@@ -1,12 +1,12 @@
 ﻿using AuthServer.Core.DTOs;
 using AuthServer.Core.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthServer.API.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+
     public class AuthController : CustomBaseController   // Authentication işlemlerini (Kimlik doğrulama, Token oluşturma) bu controllerda yapacağız
     {
         private readonly IAuthService _authService;
@@ -17,7 +17,7 @@ namespace AuthServer.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateTokenAsync(LoginDto loginDto)
+        public async Task<IActionResult> CreateToken(LoginDto loginDto)
         {
             var result=await _authService.CreateTokenAsync(loginDto); // CreateTokenAsync metodunu AuthService sınıfında doldurduk. Burada CreateTokenAsync metodunu çağıracağız.
             return CreateActionResult(result);

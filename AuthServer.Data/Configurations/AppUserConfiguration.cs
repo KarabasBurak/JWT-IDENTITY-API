@@ -14,7 +14,7 @@ namespace AuthServer.Data.Configurations
         public void Configure(EntityTypeBuilder<AppUser> builder)
         {
             builder.HasKey(x => x.Id);
-            builder.Property(x=>x.City).IsRequired();
+            builder.Property(x=>x.City).IsRequired(false);
 
         }
     }

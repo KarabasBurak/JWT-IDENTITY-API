@@ -1,7 +1,9 @@
 ﻿using AuthServer.Core.DTOs;
 using AuthServer.Core.Entities;
 using AuthServer.Core.Services;
+using AuthServer.Service.Mapping;
 using AutoMapper;
+using AutoMapper.Internal.Mappers;
 using Microsoft.AspNetCore.Identity;
 using SharedLibrary;
 using SharedLibrary.Dtos;
@@ -19,15 +21,18 @@ namespace AuthServer.Service.Services
             _mapper = mapper;
         }
 
-        public async Task<Response<AppUserDto>> GetUserByNameAsync(string username) 
+        public async Task<Response<AppUserDto>> GetUserByNameAsync(string userName)
         {
-            var user= await _userManager.FindByNameAsync(username); // client'dan aldğım username nesnesine atanmış veriyi AppUser tablosunda arama işlemi yapıldı. sonuç user değişkenine                                                                 atandı
+            var user = await _userManager.FindByNameAsync(userName);
+
             if (user == null)
             {
-                return Response<AppUserDto>.Fail("Username Not Found", 400, true);
+                return Response<AppUserDto>.Fail("UserName not found", 404, true);
             }
 
-            return Response<AppUserDto>.Success(200);
+            var userDto= _mapper.Map<AppUserDto>(user);
+
+            return Response<AppUserDto>.Success(userDto, 200);
         }
 
         // Yeni kullanıcı oluşturmak için RegistirationAsync metodunda kodlama yapıyoruz.

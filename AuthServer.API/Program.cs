@@ -7,7 +7,6 @@ using AuthServer.Data;
 using AuthServer.Data.Repositories;
 using AuthServer.Service.Mapping;
 using AuthServer.Service.Services;
-using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

@@ -1,10 +1,11 @@
 ﻿using AuthServer.Core.DTOs;
 using AuthServer.Core.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthServer.API.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class RegisterController : CustomBaseController
     {
@@ -16,18 +17,18 @@ namespace AuthServer.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegisterationAsync(RegisterDto registerDto)
+        public async Task<IActionResult> Registeration(RegisterDto registerDto)
         {
             
             var result=await _registerService.RegisterationAsync(registerDto);
             return CreateActionResult(result);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> GetUsernameAsync(string username)
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> GetUser()
         {
-            var result = await _registerService.GetUserByNameAsync(username);
-            return CreateActionResult(result);
+            return CreateActionResult(await _registerService.GetUserByNameAsync(HttpContext.User.Identity.Name));
         }
 
 

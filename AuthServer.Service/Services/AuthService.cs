@@ -58,41 +58,33 @@ namespace AuthServer.Service.Services
         // Login olurken ilgili bilgileri kontrol edip bilgiler doğru ise üretilecek token işlemlerini yapıyoruz
         public async Task<Response<TokenDto>> CreateTokenAsync(LoginDto loginDto)
         {
-            if(loginDto == null) // Client tarafından login bilgilerini(email ve password) alıyoruz ve boş/dolu olduğunu kontrol ediyoruz.
+            if (loginDto == null) throw new ArgumentNullException(nameof(loginDto));
+
+            var user = await _userManager.FindByEmailAsync(loginDto.Email);
+
+            if (user == null) return Response<TokenDto>.Fail("Email or Password is wrong", 400, true);
+
+            if (!await _userManager.CheckPasswordAsync(user, loginDto.Password))
             {
-                throw new ArgumentException(nameof(loginDto));
+                return Response<TokenDto>.Fail("Email or Password is wrong", 400, true);
             }
+            var token = _tokenService.CreateToken(user);
 
-            var user= await _userManager.FindByEmailAsync(loginDto.Email);  // loginDto dolu ise loginDto'dan gelen Emaile göre veritabanında bu email var mı/yok mu kontrol ediyoruz.
+            var userRefreshToken = await _userRefreshToken.Where(x => x.UserId == user.Id).SingleOrDefaultAsync();
 
-            if (user==null)
+            if (userRefreshToken == null)
             {
-                return Response<TokenDto>.Fail("Email or Password is Wrong",400,true);
+                await _userRefreshToken.AddAsync(new UserRefreshToken { UserId = user.Id, RefreshToken = token.RefreshToken, Expiration = token.RefreshTokenExpiration });
             }
-
-            var password= await _userManager.CheckPasswordAsync(user,loginDto.Password);  // Email var ise password doğruluğu kontrol (true veya false ile) ediyoruz.
-            if (!password)
-            {
-                return Response<TokenDto>.Fail("Email or Password is Wrong", 400, true);
-            }
-
-            var token = _tokenService.CreateToken(user); // ITokenService'deki CreateToken metodunu çağırdık ve token oluştururken AppUser için oluşturacağımız için user değişkenini verdik
-
-            var userRefreshToken = await _userRefreshToken.Where(x => x.UserId == user.Id).SingleOrDefaultAsync(); // UserId'ye göre refresh token çek
-
-            if (userRefreshToken == null) // refresh token yok ise refresh token üret
-            {
-                await _userRefreshToken.AddAsync(new UserRefreshToken {UserId=user.Id, RefreshToken=token.RefreshToken, Expiration=token.RefreshTokenExpiration});
-            }
-            else // var ise mevcut refresh token'ı tanımla
+            else
             {
                 userRefreshToken.RefreshToken = token.RefreshToken;
                 userRefreshToken.Expiration = token.RefreshTokenExpiration;
             }
 
             await _unitOfWork.CommitAsync();
-            return Response<TokenDto>.Success(token,200);
 
+            return Response<TokenDto>.Success(token, 200);
         }
 
         // Client, üyelik sistemi gerektirmeyen API'lere istek atarken token gereklidir. CreateTokenClient metodu ile token üretilecek

@@ -1,4 +1,5 @@
 ﻿using AuthServer.Core.DTOs;
+using AuthServer.Core.Entities;
 using SharedLibrary;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,6 @@ namespace AuthServer.Core.Services
     {
         Task<Response<AppUserDto>> RegisterationAsync(RegisterDto registerDto);
 
-        Task<Response<AppUserDto>> GetUserByNameAsync(string username); // DB'den username nesnesi kullanıcı çekip dönmek için bu metod tanımlandı
+        Task<Response<AppUserDto>> GetUserByNameAsync(string userName); // DB'den username nesnesi kullanıcı çekip dönmek için bu metod tanımlandı
     }
 }
