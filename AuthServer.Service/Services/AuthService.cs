@@ -94,7 +94,7 @@ namespace AuthServer.Service.Services
 
             if(client == null)
             {
-                return Response<ClientTokenDto>.Fail("ClientId or ClientSecret not found", 404,true);
+                return Response<ClientTokenDto>.Fail("ClientId or ClientSecret not found", 404,false);
             }
 
             var token= _tokenService.CreateTokenByClient(client);
