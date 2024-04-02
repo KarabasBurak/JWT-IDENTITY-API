@@ -7,13 +7,13 @@ using AuthServer.Data;
 using AuthServer.Data.Repositories;
 using AuthServer.Service.Mapping;
 using AuthServer.Service.Services;
-using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SharedLibrary.Configurations;
+using SharedLibrary.Exceptions;
 using SharedLibrary.Extensions;
 using System.Reflection;
 
@@ -113,7 +113,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+else
+{
+    // app.UseCustomException();
+}
 
+app.UseCustomException(); // Bu metodu CustomExceptionHandler sınıfında oluşturduk. hataları yakalamak için
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
